@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "iamafile" > /tmp/iamafile
+file /tmp/iamafile
