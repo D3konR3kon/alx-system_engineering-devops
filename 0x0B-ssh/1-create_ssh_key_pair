@@ -1,2 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Command below generates a new SSH key pair using the RSA algorithm
 ssh-keygen -t rsa -b 4096 -f school -N "betty"
