@@ -11,7 +11,6 @@ cat > /var/www/html/404.html << 'EOF'
 Ceci n'est pas une page
 EOF
 
-
 cat > /etc/nginx/sites-available/default << 'EOF'
 server {
     listen 80 default_server;
@@ -39,7 +38,6 @@ server {
 }
 EOF
 
-
 nginx -t
 
 if command -v systemctl > /dev/null 2>&1 && systemctl is-system-running > /dev/null 2>&1; then
@@ -49,7 +47,6 @@ else
 
     service nginx start
 fi
-
 
 ufw allow 'Nginx HTTP' 2>/dev/null || true
 
