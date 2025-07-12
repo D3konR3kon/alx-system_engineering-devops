@@ -2,7 +2,7 @@
 # Script that installs and configures Nginx on Ubuntu
 # Nginx where it should be listening on port 80
 # Serve a page that would return a Hello World string
-#
+
 # colors
 blue='\e[1;34m'
 brown='\e[0;33m'

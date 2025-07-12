@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Configure Nginx with 301 redirect for /redirect_me
+
+apt-get update
+
+apt-get install -y nginx
+
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
+
+cat > /etc/nginx/sites-available/default << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # 301 Redirect for /redirect_me
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF
+
+nginx -t
+
+if command -v systemctl > /dev/null 2>&1 && systemctl is-system-running > /dev/null 2>&1; then
+    systemctl start nginx
+    systemctl enable nginx
+else
+    
+    service nginx start
+
+fi
+
+ufw allow 'Nginx HTTP' 2>/dev/null || true
+
+echo "Nginx configured successfully with 301 redirect for /redirect_me"
