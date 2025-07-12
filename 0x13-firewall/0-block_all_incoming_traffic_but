@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Install and configure UFW firewall for web-01
+# Allow only SSH (22), HTTP (80), and HTTPS (443) traffic
+
+apt-get update
+apt-get install -y ufw
+
+ufw --force reset
+
+ufw default deny incoming
+ufw default allow outgoing
+
+ufw allow 22
+ufw allow 80
+ufw allow 443
+
+ufw --force enable
+ufw status verbose
+
+echo "UFW firewall configured successfully"
+echo "Allowed ports: 22 (SSH), 80 (HTTP), 443 (HTTPS)"
+echo "All other incoming traffic is blocked"
