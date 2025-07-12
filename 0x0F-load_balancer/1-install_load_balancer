@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Install and configure HAproxy load balancer
+# This script sets up HAproxy to load balance between two web servers (web-01 and web-02)
+
+apt-get update
+
+apt-get install -y haproxy
+
+systemctl enable haproxy 2>/dev/null || update-rc.d haproxy enable
+
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup
+
+cat > /etc/haproxy/haproxy.cfg << 'EOF'
+global
+    daemon
+    maxconn 256
+
+defaults
+    mode http
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+frontend web_frontend
+    bind *:80
+    default_backend web_servers
+
+backend web_servers
+    balance roundrobin
+    server web-01 web-01:80 check
+    server web-02 web-02:80 check
+EOF
+
+haproxy -c -f /etc/haproxy/haproxy.cfg
+
+sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+
+if command -v systemctl > /dev/null 2>&1 && systemctl is-system-running > /dev/null 2>&1; then
+    systemctl restart haproxy
+    systemctl enable haproxy
+else
+    service haproxy restart
+    update-rc.d haproxy enable
+fi
+
+ufw allow 'WWW' 2>/dev/null || ufw allow 80 2>/dev/null || true
+
+echo "HAproxy configured successfully with roundrobin load balancing"
+echo "Backend servers: web-01 and web-02"
+echo "Load balancer listening on port 80"
