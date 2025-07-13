@@ -36,7 +36,7 @@ frontend www-http
     redirect scheme https code 301
 
 frontend www-https
-    bind *:443 ssl crt /etc/ssl/certs/www.your-domain.com.pem
+    bind *:443 ssl crt /etc/ssl/certs/www.dilaonline.com.pem
     
     http-response set-header Strict-Transport-Security "max-age=31536000; includeSubDomains"
     http-response set-header X-Frame-Options "SAMEORIGIN"
